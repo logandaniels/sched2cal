@@ -14,6 +14,8 @@ class Course:
 
     def getTitle(self):
         return self.title
+    def getStartTime(self):
+        return self.startTime
     def getEndTime(self):
         return self.endTime
     def getLocation(self):
@@ -22,6 +24,7 @@ class Course:
         return self.sectionType
     def getDays(self):
         return self.days    
+
 
     def __str__(self):
         return ', '.join([self.title, self.sectionType, self.days,
