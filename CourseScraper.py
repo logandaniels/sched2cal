@@ -45,7 +45,6 @@ class CourseScraper:
             # and add each value to the current Course
 
             sectionType = [string for string in row.find(headers="t3").stripped_strings][0]
-            print("section type is " + sectionType)
             if "Lecture" in sectionType:
                 sectionType = "LEC"
             elif "Lab" in sectionType:
@@ -58,7 +57,6 @@ class CourseScraper:
             days = row.find(headers="t4").string.strip()
             course.setDays(days)
 
-            # TODO: make sure the times are added in the proper ical format
             times = [string for string in row.find(headers="t6").stripped_strings]
             startTime = times[0]
             endTime = times[2]
