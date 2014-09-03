@@ -136,10 +136,3 @@ class Calendarizer:
 
         for event in events:
             self.service.events().insert(calendarId=created_calendar["id"], body=event).execute()
-
-
-
-
-
-
-
