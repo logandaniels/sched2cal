@@ -13,7 +13,7 @@ class Course:
         self.days = days
 
     def getTitle(self):
-        return self.title
+        return self.title + " - " + self.sectionType
     def getStartTime(self):
         return self.startTime
     def getEndTime(self):
