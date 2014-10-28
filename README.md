@@ -22,4 +22,4 @@ Your browser should pop up asking to authenticate with your Google account. Once
 
 ##Notes
 
-It's pretty rough in its current state, but it works. I'd like to make it download the HTML automatically, but the U doesn't seem to have a robuts (public) API and I don't yet know how to mess with their authentication process. Also, currently a few settings are hardcoded for the Fall 2014 semester. In the future that should be calculated by the script.
+It's ~~pretty~~ very rough in its current state, but it works. I'd like to make it download the HTML automatically, but the U doesn't seem to have a robust (public) API and I don't yet know how to mess with their authentication process. Also, currently a few settings are hardcoded for the Fall 2014 semester. In the future that should be calculated by the script.
