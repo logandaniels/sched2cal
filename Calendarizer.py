@@ -22,8 +22,8 @@ ISO_DAY_NUMBERS = { "M" : 1, "T" : 2, "W" : 3, "Th" : 4, "F" : 5}
 # Set up a Flow object to be used to authenticate.
 
 FLOW = OAuth2WebServerFlow(
-    client_id='446570179058-15657jldrum21k7vsj6rabsmf1la16da.apps.googleusercontent.com',
-    client_secret='23w0I9E09YKSGBTMZiD_gZjY',
+    client_id='',
+    client_secret='',
     scope='https://www.googleapis.com/auth/calendar',
     user_agent='SCHED2CAL/1.0')
 
