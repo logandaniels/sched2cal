@@ -4,8 +4,8 @@ import time
 import Course
 
 class CourseScraper:
-    def __init__(self, url):
-        self.soup = BeautifulSoup(open(url))
+    def __init__(self, htmlString):
+        self.soup = BeautifulSoup(htmlString)
 
     def isClassRow(self, tag):
         return tag.name == "tr" and tag.has_attr("class") and not ("tableheader" in tag["class"])
@@ -66,5 +66,7 @@ class CourseScraper:
             course.setLocation(location)
 
             courses.append(course)
+            if len(courses) == 0:
+                raise Exception("Error parsing courses.")
 
         return courses

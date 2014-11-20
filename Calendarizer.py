@@ -13,8 +13,8 @@ FLAGS = gflags.FLAGS
 
 # format: YYYYMMDD
 
-CLASSES_START_DATE = "20140902"
-CLASSES_END_DATE =  "20141210"
+CLASSES_START_DATE = "20150120"
+CLASSES_END_DATE =  "20150508"
 
 DAY_CONVERSIONS = { "M" : "MO", "T" : "TU", "W" : "WE", "Th" : "TH", "F" : "FR" }
 ISO_DAY_NUMBERS = { "M" : 1, "T" : 2, "W" : 3, "Th" : 4, "F" : 5}
@@ -52,6 +52,8 @@ class Calendarizer:
         # to get a developerKey for your own application.
         self.service = build(serviceName='calendar', version='v3', http=http)
 
+        print "\nAdding courses to your Google Calendar..."
+
 
     def getEvents(self):
         # returns a list of json-formatted course events
@@ -74,6 +76,8 @@ class Calendarizer:
                 ]
             }
             events.append(event)
+        if len(events) == 0:
+            raise Exception("Error: no events to add.")
         return events
 
     def formatTime(self, rawTime):
@@ -118,7 +122,7 @@ class Calendarizer:
         # creates a new calendar and adds each course to it as an event
 
         newCal = {
-            'summary' : "Fall 2014 Courses"
+            'summary' : "Spring 2015 Courses"
         }
 
         created_calendar = self.service.calendars().insert(body=newCal).execute()
@@ -129,10 +133,7 @@ class Calendarizer:
 
         created_calendar_entry = self.service.calendarList().insert(body=calEntry).execute()
 
-        events = self.getEvents()
-
-        print events
-        
+        events = self.getEvents()        
 
         for event in events:
             self.service.events().insert(calendarId=created_calendar["id"], body=event).execute()
