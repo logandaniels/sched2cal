@@ -7,19 +7,16 @@ Each semester I find myself going through my U of M enrollment summary and manua
 ##Prerequisites
 
 The following libraries are required to make this happen:
-- requests and httplib2 for grabbing pages
+- mechanize for x500 authentication and grabbing the enrollment summary
 - BeautifulSoup for parsing the HTML
-- gflags, apiclient, and oauth2client for authenticating with Google
+- httplib2, gflags, apiclient, and oauth2client for authenticating with Google
 
 ##Usage
 
-Navigate to your registration summary by clicking [here](https://webapps-prd.oit.umn.edu/registration/initializeCurrentEnrollment.do?institution=UMNTC) or by slicking _register_ on the onestop sidebar. When the page loads, save it into the sched2cal directory as `whatever-you-want.html`. At least on my Mac, I had to specify that Chrome save it as 'HTML only', rather than as 'Webpage Complete'.
-
-Then, from the command line, simply run
-`python sched2cal.py <html-filename>`
+From the command line, simply run
+`python sched2cal.py`
     
-Your browser should pop up asking to authenticate with your Google account. Once you do so, the script should do its thing and create the events in your Google Calendar in a new subcalendar called *Fall 2014*. 
+You'll be asked to provide your x500 username and password. These stay local, so don't worry about me stealing your identity. Then your browser should pop up asking to authenticate with your Google account. Once you do so, the script should do its thing and create the events in your Google Calendar in a new subcalendar called *Spring 2015 Courses*. 
 
 ##Notes
-
-It's ~~pretty~~ very rough in its current state, but it works. I'd like to make it download the HTML automatically, but the U doesn't seem to have a robust (public) API and I don't yet know how to mess with their authentication process. Also, currently a few settings are hardcoded for the Fall 2014 semester. In the future that should be calculated by the script.
+To use this, you'll have to generate a client ID and client secret [as described here](https://developers.google.com/google-apps/calendar/auth) and place them in the appropriate locations in the FLOW object in Calendarizer.py.

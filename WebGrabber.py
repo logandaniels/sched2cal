@@ -1,4 +1,3 @@
-import requests
 import mechanize
 import getpass
 import sys
