@@ -5,13 +5,8 @@ import pytz
 
 # start/end date format: YYYYMMDD
 
-CLASSES_START_DATE = "20150120"
-CLASSES_START_DATETIME = datetime.strptime(CLASSES_START_DATE, "%Y%m%d")
-CLASSES_END_DATE =  "20150508"
-CLASSES_END_DATETIME = datetime.strptime(CLASSES_END_DATE, "%Y%m%d")
-
 DAY_CONVERSIONS = { "M" : "MO", "T" : "TU", "W" : "WE", "Th" : "TH", "F" : "FR" }
-ISO_DAY_NUMBERS = { "M" : 1, "T" : 2, "W" : 3, "Th" : 4, "F" : 5}
+ISO_DAY_NUMBERS = { "M" : 1, "T" : 2, "W" : 3, "Th" : 4, "F" : 5, "Sa" : 6, "Su" : 7 }
 
 class iCalMaker:
     def __init__(self, courses):
@@ -28,15 +23,20 @@ class iCalMaker:
 
         for course in self.courses:
             event = Event()
-            start, end = self.getStartAndEnd(course)
+            start, end = self.getStartAndEndDatetimes(course)
+            endDateTime = datetime.strptime(course.getEndDate(), "%m/%d/%Y")
+            endDateTime = endDateTime.replace(hour=23)
+
             event.add("summary", course.getTitle())
             event.add("dtstart", start)
             event.add("dtend", end)
                 #"timeZone" : "America/Chicago"
             event.add("location", course.getLocation())
             event.add("description", course.getLocation())
-            event.add("rrule", {"FREQ" : ["DAILY"], "BYDAY" : self.getRecurrence(course),
-                      "UNTIL" : CLASSES_END_DATETIME})
+            if "SPECIAL" not in course.getTitle():
+                # not a one-time event, so it recurs
+                event.add("rrule", {"FREQ" : ["DAILY"],
+                    "BYDAY" : self.getRecurrence(course), "UNTIL" : endDateTime})
             cal.add_component(event)
 
         try:
@@ -44,7 +44,7 @@ class iCalMaker:
         except Exception, e:
             raise Exception("Error processing events.")
 
-    def getStartAndEnd(self, course):
+    def getStartAndEndDatetimes(self, course):
         startTime = datetime.strptime(course.getStartTime(), "%I:%M %p") # contains start time
         endTime = datetime.strptime(course.getEndTime(), "%I:%M %p") # contains end time
 
@@ -72,21 +72,21 @@ class iCalMaker:
     def getFirstClassDate(self, course):
         '''returns a string representing the first day a class meets'''
         days = course.getDays()
-        datetimeObj = CLASSES_START_DATETIME
+        datetimeObj = datetime.strptime(course.getStartDate(), "%m/%d/%Y")
         # step forward one day at a time until it's a day that the class meets 
         while not self.dayMatch(days, datetimeObj.isoweekday()):
             datetimeObj = datetimeObj.replace(day=(datetimeObj.day + 1))
         return datetimeObj
 
-    def dayMatch(self, days, isoNum):
+    def dayMatch(self, recurrenceDays, isoNum):
         '''returns True if any of the days, passed as a string of
         the form "MWF", match the given iso weekday number'''
 
         # reverse so we check Th first
         possibleDays = sorted(ISO_DAY_NUMBERS.keys(), reverse=True)
         for day in possibleDays:
-            if day in days:
+            if day in recurrenceDays:
                 if ISO_DAY_NUMBERS[day] == isoNum:
                     return True
-                days = days.replace(day, "", 1)
+                recurrenceDays = recurrenceDays.replace(day, "", 1)
         return False

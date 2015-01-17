@@ -11,6 +11,10 @@ class Course:
         self.sectionType = sectionType
     def setDays(self, days):
         self.days = days
+    def setStartDate(self, date):
+        self.startDate = date
+    def setEndDate(self, date):
+        self.endDate = date
 
     def getTitle(self):
         return self.title + " - " + self.sectionType
@@ -24,6 +28,10 @@ class Course:
         return self.sectionType
     def getDays(self):
         return self.days    
+    def getStartDate(self):
+        return self.startDate
+    def getEndDate(self):
+        return self.endDate
 
 
     def __str__(self):

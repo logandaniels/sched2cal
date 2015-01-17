@@ -28,13 +28,15 @@ class CourseScraper:
                     break
 
             course = Course.Course()
+
             if row["class"] == prevRow["class"]:
-                # same class means same course as previous, so pull the
-                # course name from the previous row
+                # same html class means same course as previous, so
+                # pull the course name from the previous row
                 titleCell = prevRow.find(headers="t2")
             else:
                 # find new course name
                 titleCell = row.find(headers="t2")
+
             # now add the course title to the Course object with proper whitespace
             title = titleCell.find("a").string
             title = ' '.join(title.split())
@@ -44,15 +46,33 @@ class CourseScraper:
             # parse a value out of each cell,
             # and add each value to the current Course
 
-            sectionType = [string for string in row.find(headers="t3").stripped_strings][0]
-            if "Lecture" in sectionType:
-                sectionType = "LEC"
-            elif "Lab" in sectionType:
-                sectionType = "LAB"
+            sectionText = [string for string in row.find(headers="t3").stripped_strings]
+            if len(sectionText) == 0:
+                # no section type; perhaps a one-time course event
+                sectionType = "SPECIAL"
             else:
-                sectionType  = "DISC"
-
+                sectionText = sectionText[0]
+                if "Lecture" in sectionText:
+                    sectionType = "LEC"
+                elif "Lab" in sectionText:
+                    sectionType = "LAB"
+                else:
+                    sectionType  = "DISC"
             course.setSectionType(sectionType)
+
+            dates = [string for string in row.find(headers="t5").stripped_strings]
+            course.setStartDate(dates[0])
+            course.setEndDate(dates[2])
+
+            location = row.find(headers="t7").string
+
+            if "n/a" in location:
+                # night class, so skip it.
+                # this may cause problems if there are night classes that
+                # have no physical lecture but do have a physical discussion
+                continue
+
+            course.setLocation(location)
 
             days = row.find(headers="t4").string.strip()
             course.setDays(days)
@@ -62,8 +82,6 @@ class CourseScraper:
             endTime = times[2]
             course.setTimes(startTime, endTime)
 
-            location = row.find(headers="t7").string
-            course.setLocation(location)
 
             courses.append(course)
             if len(courses) == 0:
