@@ -1,4 +1,4 @@
-#Deprecated
+#Obsolete
 As of the 2015 UMN Peoplesoft upgrade, sched2cal no longer works.
 
 ---
