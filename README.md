@@ -1,3 +1,8 @@
+#Deprecated
+As of the 2015 UMN Peoplesoft upgrade, sched2cal no longer works.
+
+---
+
 #Sched2Cal
 A Python utility for automatically creating Google Calendar events for your University of Minnesota courses.
 
